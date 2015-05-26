@@ -56,8 +56,7 @@ aio-master-1.vm,production,1432399328,2015-05-23T16:42:35.239Z,50a26624029999e5a
 The events in the report can be retrived with the hash using this API call:
 
 ```shell
-curl -G 'http://localhost:8080/v4/events' --data-urlencode
-'query=["=","report", "50a26624029999e5afe5c6e3dca87b7effcefac2"]'
+puppet report display 50a26624029999e5afe5c6e3dca87b7effcefac2
 ```
 
 
@@ -96,7 +95,7 @@ agent-2.vm,production,1432547780,2015-05-25T09:56:21.674Z,a9313bc6cbccc5d9dd60e5
 The events in the report can be retrived with the hash using this API call:
 
 ```shell
-curl -G 'http://localhost:8080/v4/events' --data-urlencode 'query=["=","report", "a9313bc6cbccc5d9dd60e5247f48380ea3f887cb"]' 
+puppet report display a9313bc6cbccc5d9dd60e5247f48380ea3f887cb
 ```
 
 [https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example](https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example)
