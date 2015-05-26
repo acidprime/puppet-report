@@ -52,11 +52,11 @@ Puppet::Face.define(:report, '0.0.1') do
       query = ["and",["=",["node","active"],true]]
       json_query = URI.escape(query.to_json)
 
-      unless reports = PSON.load(connection.request_get("/v4/nodes/?query=#{json_query}", {"Accept" => 'application/json'}).body)
-        raise "Error parsing json output of puppet search #{reports}"
+      unless nodes = PSON.load(connection.request_get("/v4/nodes/?query=#{json_query}", {"Accept" => 'application/json'}).body)
+        raise "Error parsing json output of puppet search #{nodes}"
       end
-      Puppet.debug(reports)
-      reports
+      Puppet.debug(nodes)
+      nodes 
     end
 
     when_rendering :console do |reports,options|
