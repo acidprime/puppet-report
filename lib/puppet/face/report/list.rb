@@ -1,5 +1,9 @@
 require 'puppet/face'
+begin
 require 'puppet/util/puppetdb'
+rescue
+  Puppet.warning("Unable to automatically lookup puppetdb server information")
+end
 require 'puppet/network/http_pool'
 require 'uri'
 require 'time'

@@ -1,5 +1,9 @@
 require 'puppet/face'
+begin
 require 'puppet/util/puppetdb'
+rescue
+  Puppet.warning("Unable to automatically lookup puppetdb server information")
+end
 require 'puppet/network/http_pool'
 require 'uri'
 require 'time'
@@ -60,7 +64,7 @@ Puppet::Face.define(:report, '0.0.1') do
     when_rendering :console do |reports,options|
       Puppet.debug(options)
       if reports.empty?
-        Puppet.notice("No reports older then #{options[:minutes]} minutes found")
+        Puppet.notice("No reports older then #{(options[:minutes] || 60)} minutes found")
       end
       output = Hash.new 
       reports.each do |report|
