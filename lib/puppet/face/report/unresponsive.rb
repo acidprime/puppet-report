@@ -83,7 +83,7 @@ Puppet::Face.define(:report, '0.0.1') do
                           ].join(',')
         end
       end
-      output.sort_by{|key, value| key}.map{|key,value| value}
+      output.sort_by{|key, value| key}.reverse.map{|key,value| value}
     end
   end
 end
