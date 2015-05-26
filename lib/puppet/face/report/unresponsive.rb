@@ -12,7 +12,7 @@ require 'json'
 Puppet::Face.define(:report, '0.0.1') do
   extend Puppet::Util::Colors
   action :unresponsive do
-    summary "Queries puppetdb for unresponsive nodes based on local clock" 
+    summary "Queries puppetdb for unresponsive nodes based on local clock"
     arguments "<none>"
 
     option "--minutes MINUTES" do

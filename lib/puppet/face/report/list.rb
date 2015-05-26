@@ -12,7 +12,7 @@ require 'json'
 Puppet::Face.define(:report, '0.0.1') do
   extend Puppet::Util::Colors
   action :list do
-    summary "Queries puppetdb for list of  reports with specific status" 
+    summary "Queries puppetdb for list of  reports with specific status"
     arguments "<none>"
 
     option "--status REPORT_STATUS" do
@@ -53,10 +53,10 @@ Puppet::Face.define(:report, '0.0.1') do
     when_invoked do |options|
       connection = Puppet::Network::HttpPool.http_instance(options[:host],options[:port])
 
-      query = ["and",["=","status",options[:status]]] 
+      query = ["and",["=","status",options[:status]]]
 
       query << ["=",["node","active"],true] unless options[:deactive]
-    
+
       json_query = URI.escape(query.to_json)
       unless reports = PSON.load(connection.request_get("/v4/reports/?query=#{json_query}", {"Accept" => 'application/json'}).body)
         raise "Error parsing json output of puppet search: #{reports}"
