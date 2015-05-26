@@ -1,42 +1,31 @@
-# Simple PuppetDB wrapper
-This is a puppet face that will display all exports in puppetdb from the command line
+# Overview
+
+This is a puppet face that adds two new sub commands the puppet report application.
+This tool is designed to be used from a machine that is already in the puppetdb whitelist.
+Puppet Masters or Masters of Masters (CAs) should work out of the box.
+
+# Installation
+Puppet faces are automatically loaded when installed in the modulepath. Install in the environment of
+your puppet master. Once installed the command should immediately be available. If you wish to not install
+this in your module path you can export the `RUBYLIB` environment variable with a fully qualified path to
+the lib directory inside this module as well.
 
 # Usage
-1. Install the module into your modulepath
+
+## Unresponsive nodes (Has not checked in within the last 60 minutes)
+
+To query puppetdb for reports for nodes that have not checked in for the last 60 minutes.
 
 ```shell
-puppet node exports
+/opt/puppet/bin/puppet report unresponsive
 ```
-
-An example use would be monitoring students checking into the puppet master in the puppet advanced class
-
 ```shell
-while :; do clear; puppet node exports --highlight; sleep 2; done
+agent-1.vm,production,2015-05-26T04:24:54.168Z,0 days,2 hours,10 minutes,47 seconds
+aio-master-1.vm,production,2015-05-26T06:25:04.094Z,0 days,0 hours,10 minutes,37 seconds
 ```
-or if you do not have `--color` in watch:
-```shell
-watch 'puppet node exports'
-```
-
-## Example Usage
-
-To query for all exported resources ( be aware there is a 20,000 limit by default )
-```shell
-puppet node exports
-```
+You can tune the query to find nodes with different deltas by passing ``--minutes`
 
 ```shell
-Name                                 Exports
-puppet3.puppetlabs.vm                File[/tmp/production_puppet3.puppetlabs.vm_2]
-puppet3.puppetlabs.vm                File[/tmp/production_puppet3.puppetlabs.vm]
-puppet3.puppetlabs.vm                User[foooo]
-```
-To query for just user resources
-```shell
-puppet node exports --resources user
-```
-
-```shell
-Name                                 Exports
-puppet3.puppetlabs.vm                User[foooo]
-```
+/opt/puppet/bin/puppet report unresponsive --minutes 120
+agent-1.vm,production,2015-05-26T04:24:54.168Z,0 days,2 hours,12 minutes,22 seconds
+``` 

@@ -60,6 +60,7 @@ Puppet::Face.define(:report, '0.0.1') do
     end
 
     when_rendering :console do |reports,options|
+      Puppet.debug(options)
       if reports.empty?
         Puppet.notice("No reports older then #{options[:minutes]} minutes found")
       end
@@ -75,7 +76,7 @@ Puppet::Face.define(:report, '0.0.1') do
           result
         }
         # Only return values that match our predicate
-        if delta / 60 >= options[:minutes].to_i
+        if (delta / 60) >= (options[:minutes] || 60).to_i
           output[delta] = [ report['certname'],
                             report['report-environment'],
                             report['report-timestamp'],
