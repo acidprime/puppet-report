@@ -1,11 +1,11 @@
 # Overview
 
-This is a puppet face that adds two new sub commands the puppet report application.
-This tool is designed to be used from a machine whos certificate is already in the puppetdb whitelist.
+This is a puppet [face](https://puppetlabs.com/blog/puppet-faces-what-the-heck-are-faces) that adds two new sub commands the puppet report application.
+This tool is designed to be used from a machine whos certificate is already in the puppetdb [whitelist](https://docs.puppetlabs.com/puppetdb/latest/configure.html#certificate-whitelist).
 Puppet Masters or Masters of Masters (CAs) should work out of the box for example.
 
 # Installation
-Puppet faces are automatically loaded when installed in the modulepath. Install in the environment of
+Puppet faces are automatically loaded when installed in the [modulepath](https://docs.puppetlabs.com/puppet/3.6/reference/dirs_modulepath.html). Install in the environment of
 your puppet master. Once installed the command should immediately be available. If you wish to not install
 this in your module path you can export the `RUBYLIB` environment variable with a fully qualified path to
 the lib directory inside this module as well.
@@ -14,10 +14,11 @@ the lib directory inside this module as well.
 
 Help can be found with `puppet help report` and specific help can be found with `puppet help report unresponsive`
 
-## Unresponsive nodes (Has not checked in within the last 60 minutes)
+## Unresponsive nodes
 
 To query puppetdb for reports for nodes that have not checked in for the last 60 minutes.
 The output is reverse sorted with the highest delta nodes first
+
 ```shell
 puppet report unresponsive
 ```
@@ -30,7 +31,7 @@ aio-master-1.vm,production,2015-05-26T06:25:03.094Z,0 days,1 hours,10 minutes,37
 | -------- | ----------- | ---------------- | ------ |-------- | --------- |---------  |
 | certname | environment | report-timestamp | N days | N hours | N minutes | N seconds |
 
-You can tune the query to find nodes with different deltas by passing ``--minutes`
+You can tune the query to find nodes with different deltas by passing `--minutes`
 
 ```shell
 puppet report unresponsive --minutes 120
@@ -41,8 +42,10 @@ agent-1.vm,production,2015-05-26T04:24:54.168Z,0 days,2 hours,12 minutes,22 seco
 | certname | environment | report-timestamp | N days | N hours | N minutes | N seconds |
 
 ## Nodes with changed status 
-Lists the active nodes with changed status
-```
+
+List the active nodes with reports with a changed status.
+
+```shell
 puppet report list --status changed
 aio-master-1.vm,production,1432399328,2015-05-23T16:42:35.239Z,50a26624029999e5afe5c6e3dca87b7effcefac2
 ```
@@ -50,10 +53,19 @@ aio-master-1.vm,production,1432399328,2015-05-23T16:42:35.239Z,50a26624029999e5a
 | -------- | ----------- | -------------- | ---------------- | ---------------------- |
 | certname | environment | config_version | report-timestamp | hash ( of the report ) |
 
+The events in the report can be retrived with the hash using this API call:
+
+```shell
+curl -G 'http://localhost:8080/v4/events' --data-urlencode
+'query=["=","report", "50a26624029999e5afe5c6e3dca87b7effcefac2"]'
+```
+
+
+[https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example](https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example)
 
 ## Nodes with failed status
 
-List the nodes with failed status.
+List the active nodes with reports with a failed status.
 
 ```shell
 puppet report list --status failed
@@ -81,6 +93,13 @@ agent-2.vm,production,1432547780,2015-05-25T09:56:21.674Z,a9313bc6cbccc5d9dd60e5
 | -------- | ----------- | -------------- | ---------------- | ---------------------- |
 | certname | environment | config_version | report-timestamp | hash ( of the report ) |
 
+The events in the report can be retrived with the hash using this API call:
+
+```shell
+curl -G 'http://localhost:8080/v4/events' --data-urlencode 'query=["=","report", "a9313bc6cbccc5d9dd60e5247f48380ea3f887cb"]' 
+```
+
+[https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example](https://docs.puppetlabs.com/puppetdb/2.3/api/query/v3/events.html#example)
 
 
 # Raw output
