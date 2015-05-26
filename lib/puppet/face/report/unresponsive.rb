@@ -81,7 +81,11 @@ Puppet::Face.define(:report, '0.0.1') do
         }
         # Only return values that match our predicate
         if delta / 60 >= options[:minutes].to_i
-          output << [report['certname'],report['report-environment'],report['report-timestamp'],human_timestamp].join(',')
+          output << [ report['certname'],
+                      report['report-environment'],
+                      report['report-timestamp'],
+                      human_timestamp
+                    ].join(',')
         end
       end
       output
