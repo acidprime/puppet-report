@@ -10,7 +10,6 @@ require 'time'
 require 'json'
 
 Puppet::Face.define(:report, '0.0.1') do
-  extend Puppet::Util::Colors
   action :list do
     summary "Queries puppetdb for list of  reports with specific status"
     arguments "<none>"
