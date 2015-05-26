@@ -63,7 +63,7 @@ Puppet::Face.define(:report, '0.0.1') do
       if reports.empty?
         Puppet.notice("No reports older then #{options[:minutes]} minutes found")
       end
-      output = []
+      output = Hash.new 
       reports.each do |report|
         # Calculate delta between last run and now in seconds
         delta = (Time.now - DateTime.parse(report['report-timestamp']).to_time)
@@ -76,14 +76,14 @@ Puppet::Face.define(:report, '0.0.1') do
         }
         # Only return values that match our predicate
         if delta / 60 >= options[:minutes].to_i
-          output << [ report['certname'],
-                      report['report-environment'],
-                      report['report-timestamp'],
-                      human_timestamp
-                    ].join(',')
+          output[delta] = [ report['certname'],
+                            report['report-environment'],
+                            report['report-timestamp'],
+                            human_timestamp
+                          ].join(',')
         end
       end
-      output
+      output.sort_by{|key, value| key}.map{|key,value| value}
     end
   end
 end
