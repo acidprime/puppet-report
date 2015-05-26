@@ -1,7 +1,5 @@
 require 'puppet/face'
 require 'puppet/util/puppetdb'
-require 'puppet/util/terminal'
-require 'puppet/util/colors'
 require 'puppet/network/http_pool'
 require 'uri'
 require 'time'
