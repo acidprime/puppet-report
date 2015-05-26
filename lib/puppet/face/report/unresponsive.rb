@@ -13,11 +13,6 @@ Puppet::Face.define(:report, '0.0.1') do
     summary "Queries puppetdb for unresponsive nodes based on local clock" 
     arguments "<none>"
 
-    option "--deactive" do
-      summary "Show both active and deactive nodes"
-      default_to { false }
-    end
-
     option "--minutes MINUTES" do
       summary "The number of minutes to check the delta against"
       default_to { 60 }
@@ -66,7 +61,7 @@ Puppet::Face.define(:report, '0.0.1') do
 
     when_rendering :console do |reports,options|
       if reports.empty?
-        Puppet.notice("No reports found")
+        Puppet.notice("No reports older then #{options[:minutes]} minutes found")
       end
       output = []
       reports.each do |report|
