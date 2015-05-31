@@ -19,6 +19,11 @@ Puppet::Face.define(:report, '0.0.1') do
       default_to { 60 }
     end
 
+    option "--deactive" do
+      summary "The number of minutes to check the delta against"
+      default_to { false }
+    end
+
     option "--host HOSTNAME" do
       summary "The hostname of the puppetdb server"
       default_to { Puppet::Util::Puppetdb.server }
@@ -49,8 +54,11 @@ Puppet::Face.define(:report, '0.0.1') do
 
     when_invoked do |options|
       connection = Puppet::Network::HttpPool.http_instance(options[:host],options[:port])
-
-      query = ["and",["=",["node","active"],true]]
+      if options[:deactive]
+        query = ["and",["=",["node","active"],false]]
+      else 
+        query = ["and",["=",["node","active"],true]]
+      end
       json_query = URI.escape(query.to_json)
 
       unless nodes = PSON.load(connection.request_get("/v4/nodes/?query=#{json_query}", {"Accept" => 'application/json'}).body)
